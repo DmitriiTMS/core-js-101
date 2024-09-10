@@ -63,7 +63,6 @@ function doubleArray(arr) {
 }
 
 
-
 /**
  * Returns an array of positive numbers from the specified array in original order
  *
@@ -551,10 +550,25 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
-}
 
+function group(array, keySelector, valueSelector) {
+  const resultMap = new Map();
+
+  array.forEach((item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+
+    // If the key doesn't exist in the map, create a new entry
+    if (!resultMap.has(key)) {
+      resultMap.set(key, []);
+    }
+
+    // Push the value into the corresponding array for this key
+    resultMap.get(key).push(value);
+  });
+
+  return resultMap;
+}
 
 /**
  * Projects each element of the specified array to a sequence
@@ -585,8 +599,20 @@ function selectMany(arr, childrenSelector) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+
+
+function getElementByIndexes(arr, indexes) {
+  let element = arr;
+
+  indexes.forEach((item) => {
+    if (Array.isArray(element) && item >= 0 && item < element.length) {
+      element = element[item];
+    } else {
+      throw new Error('Index out of bounds');
+    }
+  });
+
+  return element;
 }
 
 
